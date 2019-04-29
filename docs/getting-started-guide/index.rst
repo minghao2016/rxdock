@@ -8,6 +8,7 @@ Getting started guide
    :maxdepth: 2
 
    overview
+   quick-and-dirty-installation
    prerequisites
    unpacking
    building
