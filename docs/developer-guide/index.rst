@@ -9,5 +9,6 @@ Developer guide
 
    target-platforms
    build-system
+   coding-standards
    documentation
    versioning
