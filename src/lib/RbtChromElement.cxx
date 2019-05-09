@@ -82,7 +82,7 @@ bool RbtChromElement::VectorOK(const RbtXOverList &v, int i) const {
 void RbtChromElement::CauchyMutate(double mean, double variance) {
   // Need to convert the Cauchy random variable to a positive number
   // and use this as the relative step size for mutation
-  double relStepSize = fabs(m_rand.GetCauchyRandom(mean, variance));
+  double relStepSize = std::fabs(m_rand.GetCauchyRandom(mean, variance));
   Mutate(relStepSize);
 }
 

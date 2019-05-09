@@ -11,9 +11,9 @@
  ***********************************************************************/
 
 #include "RbtPsfFileSink.h"
+#include <cstdio>
 #include <iomanip>
 #include <sstream>
-#include <stdio.h>
 
 ////////////////////////////////////////
 // Constructors/destructors
