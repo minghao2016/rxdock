@@ -18,5 +18,4 @@ Reference guide
    atom-typing
    file-formats
    programs
-   use-cases
    appendix

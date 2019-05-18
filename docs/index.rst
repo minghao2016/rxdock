@@ -121,7 +121,7 @@ For installation details and first-users instructions, please visit :ref:`Instal
    getting-started-guide/index
    reference-guide/index
    developer-guide/index
-   tutorials/index
+   user-guide/index
 
 .. _support:
 

@@ -1,7 +1,8 @@
-.. _tutorials:
+.. _user-guide:
 
-Tutorials
-=========
+**********
+User guide
+**********
 
 The following tutorials describe common use cases of rDock.
 
@@ -9,6 +10,7 @@ The following tutorials describe common use cases of rDock.
    :maxdepth: 2
 
    docking-in-3-steps
+   docking-strategies
    multi-step-protocol-for-htvs
    calculating-roc-curves
    running-rdock-in-parallel

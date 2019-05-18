@@ -1,5 +1,7 @@
-Common use cases
-================
+.. _docking-strategies:
+
+Docking strategies
+==================
 
 This section does not pretend to be a comprehensive user guide. It does, however, highlight the key steps the user must take for different docking strategies, and may serve as a useful checklist in writing such a guide in the future.
 
