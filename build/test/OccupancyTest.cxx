@@ -11,11 +11,9 @@
 #include "RbtVariant.h"
 #include "RbtVdwIdxSF.h"
 
-CPPUNIT_TEST_SUITE_REGISTRATION(OccupancyTest);
-
 double OccupancyTest::TINY = 1E-4;
 
-void OccupancyTest::setUp() {
+void OccupancyTest::SetUp() {
   try {
     // Create the docking site, receptor, and ligand objects
     const std::string &wsName = "1YET";
@@ -41,12 +39,14 @@ void OccupancyTest::setUp() {
   }
 }
 
-void OccupancyTest::tearDown() {
+void OccupancyTest::TearDown() {
   m_workSpace.SetNull();
   m_solventList.clear();
 }
 
-void OccupancyTest::testSolvationSF() {
+// 1) Check that the total desolvation score for receptor / ligand / (disabled)
+// solvent matches the total score with no solvent present
+TEST_F(OccupancyTest, SolvationSF) {
   RbtBaseSF *sfAgg = new RbtSFAgg("SCORE");
   RbtBaseSF *sfInter = new RbtSFAgg("INTER");
   RbtBaseSF *sfSolv = new RbtSAIdxSF("SOLV");
@@ -54,10 +54,12 @@ void OccupancyTest::testSolvationSF() {
   sfInter->Add(sfSolv);
   m_workSpace->SetSF(sfAgg);
 
-  CPPUNIT_ASSERT(CompareScoresForDisabledAndNoSolvent() < TINY);
+  ASSERT_LT(CompareScoresForDisabledAndNoSolvent(), TINY);
 }
 
-void OccupancyTest::testPolarSF() {
+// 2) Check that the total polar score for receptor / ligand / (disabled)
+// solvent matches the total score with no solvent present
+TEST_F(OccupancyTest, PolarSF) {
   RbtBaseSF *sfAgg = new RbtSFAgg("SCORE");
   RbtBaseSF *sfInter = new RbtSFAgg("INTER");
   RbtBaseSF *sfSetupPolar = new RbtSetupPolarSF("SETUP");
@@ -71,10 +73,12 @@ void OccupancyTest::testPolarSF() {
   sfInter->Add(sfPolar);
   m_workSpace->SetSF(sfAgg);
 
-  CPPUNIT_ASSERT(CompareScoresForDisabledAndNoSolvent() < TINY);
+  ASSERT_LT(CompareScoresForDisabledAndNoSolvent(), TINY);
 }
 
-void OccupancyTest::testVdwSF() {
+// 3) Check that the total vdW score for receptor / ligand / (disabled) solvent
+// matches the total score with no solvent present
+TEST_F(OccupancyTest, VdwSF) {
   RbtBaseSF *sfAgg = new RbtSFAgg("SCORE");
   RbtBaseSF *sfInter = new RbtSFAgg("INTER");
   RbtBaseSF *sfVdw = new RbtVdwIdxSF("VDW");
@@ -82,10 +86,10 @@ void OccupancyTest::testVdwSF() {
   sfInter->Add(sfVdw);
   m_workSpace->SetSF(sfAgg);
 
-  CPPUNIT_ASSERT(CompareScoresForDisabledAndNoSolvent() < TINY);
+  ASSERT_LT(CompareScoresForDisabledAndNoSolvent(), TINY);
 }
 
-void OccupancyTest::testVdwSFSolventModes() {
+TEST_F(OccupancyTest, VdwSFSolventModes) {
   RbtBaseSF *sfAgg = new RbtSFAgg("SCORE");
   RbtBaseSF *sfInter = new RbtSFAgg("INTER");
   RbtBaseSF *sfSystem = new RbtSFAgg("SYSTEM");
@@ -96,10 +100,11 @@ void OccupancyTest::testVdwSFSolventModes() {
   sfInter->Add(sfVdw);
   m_workSpace->SetSF(sfAgg);
 
-  CPPUNIT_ASSERT(CompareScoresForSolventModes() < TINY);
+  ASSERT_LT(CompareScoresForSolventModes(), TINY);
 }
 
-void OccupancyTest::testFlexAtomFactoryReceptor() {
+// 5) Checks the results of RbtFlexAtomFactory for receptor flexibility modes
+TEST_F(OccupancyTest, FlexAtomFactoryReceptor) {
   int expected[2][3] = {{2034, 10, 0}, {2044, 0, 0}};
   RbtModelPtr spReceptor = m_workSpace->GetReceptor();
   bool isTestOK = true;
@@ -129,10 +134,11 @@ void OccupancyTest::testFlexAtomFactoryReceptor() {
       isTestOK = false;
     }
   }
-  CPPUNIT_ASSERT(isTestOK);
+  ASSERT_TRUE(isTestOK);
 }
 
-void OccupancyTest::testFlexAtomFactorySolvent() {
+// 6) Checks the results of RbtFlexAtomFactory for solvent flexibility modes
+TEST_F(OccupancyTest, FlexAtomFactorySolvent) {
   // Expected sizes for fixed, tethered and free atom lists
   // for each value of model flexibility mode
   int expected[9][3] = {{3, 0, 0}, {0, 3, 0}, {0, 3, 0}, {0, 3, 0}, {0, 3, 0},
@@ -143,10 +149,11 @@ void OccupancyTest::testFlexAtomFactorySolvent() {
     RbtModelPtr solvent = solventList.front();
     isTestOK = testFlexAtomFactory(solventList.front(), expected);
   }
-  CPPUNIT_ASSERT(isTestOK);
+  ASSERT_TRUE(isTestOK);
 }
 
-void OccupancyTest::testFlexAtomFactoryLigand() {
+// 7) Checks the results of RbtFlexAtomFactory for ligand flexibility modes
+TEST_F(OccupancyTest, FlexAtomFactoryLigand) {
   // Expected sizes for fixed, tethered and free atom lists
   // for each value of model flexibility mode
   int expected[9][3] = {{0, 0, 44}, {0, 0, 44}, {0, 0, 44},
@@ -157,7 +164,7 @@ void OccupancyTest::testFlexAtomFactoryLigand() {
   if (!spLigand.Null()) {
     isTestOK = testFlexAtomFactory(spLigand, expected);
   }
-  CPPUNIT_ASSERT(isTestOK);
+  ASSERT_TRUE(isTestOK);
 }
 
 double OccupancyTest::CompareScoresForDisabledAndNoSolvent() {
@@ -181,10 +188,6 @@ double OccupancyTest::CompareScoresForDisabledAndNoSolvent() {
     }
     m_workSpace->SetSolvent(m_solventList);
     double scoreEnabledSolvent = pSF->Score();
-    std::cout << "Score no solvent = " << scoreNoSolvent << std::endl;
-    std::cout << "Score enabled solvent = " << scoreEnabledSolvent << std::endl;
-    std::cout << "Score disabled solvent = " << scoreDisabledSolvent
-              << std::endl;
     retVal = fabs(scoreNoSolvent - scoreDisabledSolvent);
   }
   return retVal;

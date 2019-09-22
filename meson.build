@@ -130,19 +130,19 @@ endif
 
 tests_opt = get_option('tests')
 if tests_opt
-  cppunit_dep = dependency('cppunit', required : false)
-  if cppunit_dep.found()
+  gtest_dep = dependency('gtest', required : false)
+  if gtest_dep.found()
     incTest = include_directories('build/test')
     srcTest = [
       'build/test/Main.cxx', 'build/test/OccupancyTest.cxx',
       'build/test/RbtChromTest.cxx', 'build/test/SearchTest.cxx'
     ]
     unit_test = executable(
-      'unit_test', srcTest, dependencies : cppunit_dep, link_with : libRbt,
+      'unit-test', srcTest, dependencies : gtest_dep, link_with : libRbt,
       include_directories : [incTest, incRbt]
     )
     test(
-      'unit_test', unit_test,
+      'unit-test', unit_test,
       env : [
         'RBT_ROOT=' + meson.current_source_dir(),
         'RBT_HOME=' + meson.current_source_dir() + '/build/test/RBT_HOME'
