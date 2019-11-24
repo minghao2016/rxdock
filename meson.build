@@ -73,7 +73,14 @@ srcRbt = [
   'import/simplex/src/NMSearch.cxx'
 ]
 
-pcg_cpp_dep = dependency('pcg-cpp', fallback : ['pcg', 'pcg_cpp_dep'])
+cpp_compiler = meson.get_compiler('cpp')
+
+if (host_machine.system() != 'sunos' and host_machine.system() != 'windows'
+    and cpp_compiler.get_id() != 'msvc')
+  pcg_cpp_dep = dependency('pcg-cpp', fallback : ['pcg', 'pcg_cpp_dep'])
+else
+  pcg_cpp_dep = declare_dependency()
+endif
 
 library_soversion = '0'
 libRbt = shared_library(

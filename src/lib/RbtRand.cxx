@@ -39,8 +39,13 @@ void RbtRand::Seed(int seed) { m_rng.seed(seed); }
 
 // Seed the random number generator from the random device
 void RbtRand::SeedFromRandomDevice() {
+#if !defined(__sun) && !defined(_WIN32) && !defined(_MSC_VER)
   pcg_extras::seed_seq_from<std::random_device> seed_source;
   m_rng.seed(seed_source);
+#else
+  std::random_device rd;
+  m_rng.seed(rd());
+#endif
 }
 
 // Get a random double between 0 and 1
