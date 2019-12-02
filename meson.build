@@ -105,7 +105,7 @@ executable(
   'rbdock', 'src/exe/rbdock.cxx', link_with : libRbt,
   dependencies : [cxxopts_dep, pcg_cpp_dep], include_directories : incRbt
 )
-executable(
+rbcavity = executable(
   'rbcavity', 'src/exe/rbcavity.cxx', link_with : libRbt,
   dependencies : [cxxopts_dep, pcg_cpp_dep], include_directories : incRbt
 )
@@ -165,11 +165,45 @@ if tests_opt
       link_with : libRbt, include_directories : [incTest, incRbt]
     )
     test(
+      'rbcavity-1koc', rbcavity, args : [
+        '-r', meson.current_source_dir() + '/build/test/RBT_HOME/1koc.prm',
+        '-W'
+      ],
+      env : [
+        'RBT_ROOT=' + meson.current_source_dir(),
+        'RBT_HOME=' + meson.current_source_dir() + '/build/test/RBT_HOME'
+      ],
+      timeout : 900
+    )
+    test(
+      'rbcavity-1yet', rbcavity, args : [
+        '-r', meson.current_source_dir() + '/build/test/RBT_HOME/1YET.prm',
+        '-W'
+      ],
+      env : [
+        'RBT_ROOT=' + meson.current_source_dir(),
+        'RBT_HOME=' + meson.current_source_dir() + '/build/test/RBT_HOME'
+      ],
+      timeout : 900
+    )
+    test(
+      'rbcavity-1yet-test', rbcavity, args : [
+        '-r', meson.current_source_dir() + '/build/test/RBT_HOME/1YET_test.prm',
+        '-W'
+      ],
+      env : [
+        'RBT_ROOT=' + meson.current_source_dir(),
+        'RBT_HOME=' + meson.current_source_dir() + '/build/test/RBT_HOME'
+      ],
+      timeout : 900
+    )
+    test(
       'unit-test', unit_test,
       env : [
         'RBT_ROOT=' + meson.current_source_dir(),
         'RBT_HOME=' + meson.current_source_dir() + '/build/test/RBT_HOME'
       ],
+      is_parallel : false,
       timeout : 900
     )
   endif
