@@ -99,20 +99,22 @@ libRbt = shared_library(
   include_directories : incRbtAll
 )
 
+cxxopts_dep = dependency('cxxopts', fallback : ['cxxopts', 'cxxopts_dep'])
+
 executable(
   'rbdock', 'src/exe/rbdock.cxx', link_with : libRbt,
-  dependencies : pcg_cpp_dep, include_directories : incRbt
+  dependencies : [cxxopts_dep, pcg_cpp_dep], include_directories : incRbt
 )
 executable(
   'rbcavity', 'src/exe/rbcavity.cxx', link_with : libRbt,
-  dependencies : pcg_cpp_dep, include_directories : incRbt
+  dependencies : [cxxopts_dep, pcg_cpp_dep], include_directories : incRbt
 )
 executable(
   'rbrms', 'src/exe/rbrms.cxx', link_with : libRbt, include_directories : incRbt
 )
 executable(
   'rbmoegrid', 'src/exe/rbmoegrid.cxx', link_with : libRbt,
-  dependencies : pcg_cpp_dep, include_directories : incRbt
+  dependencies : [cxxopts_dep, pcg_cpp_dep], include_directories : incRbt
 )
 executable(
   'rblist', 'src/exe/rblist.cxx', link_with : libRbt,
