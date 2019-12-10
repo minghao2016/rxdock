@@ -12,7 +12,7 @@ Step 1: Pharmacophoric restraints file
 
 The first step is to create the input file for rDock with the necessary info.
 
-As you can find in the :ref:`User Manual <reference-guide>`, this file needs one line per pharmacophore withthe next structure (each element separated with a space):
+As you can find in the :ref:`Reference guide <reference-guide>`, this file needs one line per pharmacophore with the next structure (each element separated with a space):
 
 .. code-block:: bash
 
@@ -57,7 +57,7 @@ Step 2: rDock system definition file
 
 The second and final step is to modify the system definition file (``FILE.prm``) to take into account the defined restraints.
 
-Just add a ``SECTION PHARMA`` (see the :ref:`User Guide <reference-guide>` for more info) with the following lines:
+Just add a ``SECTION PHARMA`` (see the :ref:`Reference guide <reference-guide>` for more info) with the following lines:
 
 .. code-block:: python
 
@@ -105,9 +105,9 @@ With the ``FILE.prm`` finally being:
    #############################
    SECTION PHARMA
        SCORING_FUNCTION RbtPharmaSF
-       WEIGHT formal charge
-       CONSTRAformal charge
-   END_SECTIONformal charge
+       WEIGHT 1.0
+       CONSTRAINTS_FILE pharma.restr
+   END_SECTION
 
 .. note::
 
@@ -139,4 +139,6 @@ This tutorial is an example for mandatory constraints. Optional constraints can 
        NOPT 1
    END_SECTION
 
-For more information about the pharmacophoric restraints and the parameters in ``SECTION PHARMA``, please go to the :ref:`User Guide <reference-guide>`.
+.. tip::
+
+   For more information about the pharmacophoric restraints and the parameters in ``SECTION PHARMA``, please go to the :ref:`Reference guide <reference-guide>`.
