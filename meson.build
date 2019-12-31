@@ -102,12 +102,12 @@ cxxopts_dep = dependency('cxxopts', fallback : ['cxxopts', 'cxxopts_dep'])
 
 executable(
   'rbdock', 'src/exe/rbdock.cxx', link_with : libRbt,
-  dependencies : [cxxopts_dep, pcg_cpp_dep], include_directories : incRbt,
+  dependencies : [cxxopts_dep, eigen3_dep, pcg_cpp_dep], include_directories : incRbt,
   install : true
 )
 rbcavity = executable(
   'rbcavity', 'src/exe/rbcavity.cxx', link_with : libRbt,
-  dependencies : [cxxopts_dep, pcg_cpp_dep], include_directories : incRbt,
+  dependencies : [cxxopts_dep, eigen3_dep, pcg_cpp_dep], include_directories : incRbt,
   install : true
 )
 executable(
@@ -116,7 +116,7 @@ executable(
 )
 executable(
   'rbmoegrid', 'src/exe/rbmoegrid.cxx', link_with : libRbt,
-  dependencies : [cxxopts_dep, pcg_cpp_dep], include_directories : incRbt,
+  dependencies : [cxxopts_dep, eigen3_dep, pcg_cpp_dep], include_directories : incRbt,
   install : true
 )
 executable(
@@ -125,11 +125,11 @@ executable(
 )
 executable(
   'rbcalcgrid', 'src/exe/rbcalcgrid.cxx', link_with : libRbt,
-  dependencies : pcg_cpp_dep, include_directories : incRbt, install : true
+  dependencies : [eigen3_dep, pcg_cpp_dep], include_directories : incRbt, install : true
 )
 executable(
   'rbconvgrid', 'src/exe/rbconvgrid.cxx', link_with : libRbt,
-  include_directories : incRbt, install : true
+  dependencies : eigen3_dep, include_directories : incRbt, install : true
 )
 
 dt_smarts_dep = dependency('dt_smarts', required : false)
@@ -356,7 +356,7 @@ if tests_opt
       'build/test/RbtChromTest.cxx', 'build/test/SearchTest.cxx'
     ]
     unit_test = executable(
-      'unit-test', srcTest, dependencies : [pcg_cpp_dep, gtest_dep],
+      'unit-test', srcTest, dependencies : [pcg_cpp_dep, gtest_dep, eigen3_dep],
       link_with : libRbt, include_directories : [incTest, incRbt]
     )
     test(

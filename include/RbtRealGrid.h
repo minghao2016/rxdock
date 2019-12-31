@@ -15,6 +15,11 @@
 #ifndef _RBTREALGRID_H_
 #define _RBTREALGRID_H_
 
+#ifdef __PGI
+#define EIGEN_DONT_VECTORIZE
+#endif
+#include <unsupported/Eigen/CXX11/Tensor>
+
 #include "RbtBaseGrid.h"
 
 class RbtRealGrid : public RbtBaseGrid {
@@ -62,7 +67,7 @@ public:
   /////////////////////////
   // Get attribute functions
   /////////////////////////
-  float *GetGridData() const { return m_data; }
+  float *GetGridData();
 
   /////////////////////////
   // Get/Set value functions
@@ -73,31 +78,27 @@ public:
   void SetTolerance(double tol) { m_tol = tol; }
 
   // Get/Set single grid point value with bounds checking
-  double GetValue(const RbtCoord &c) const {
-    return isValid(c) ? m_grid[GetIX(c)][GetIY(c)][GetIZ(c)] : 0.0;
-  }
-  double GetValue(unsigned int iX, unsigned int iY, unsigned int iZ) const {
-    return isValid(iX, iY, iZ) ? m_grid[iX][iY][iZ] : 0.0;
-  }
+  double GetValue(const RbtCoord &c) const;
+
+  double GetValue(unsigned int iX, unsigned int iY, unsigned int iZ) const;
+
   double GetValue(unsigned int iXYZ) const {
-    return isValid(iXYZ) ? m_data[iXYZ] : 0.0;
+    const float *data = m_grid.data();
+    return isValid(iXYZ) ? data[iXYZ] : 0.0;
   }
 
   // DM 20 Jul 2000 - get values smoothed by trilinear interpolation
   // D. Oberlin and H.A. Scheraga, J. Comp. Chem. (1998) 19, 71.
   RBTDLL_EXPORT double GetSmoothedValue(const RbtCoord &c) const;
 
-  void SetValue(const RbtCoord &c, double val) {
-    if (isValid(c))
-      m_grid[GetIX(c)][GetIY(c)][GetIZ(c)] = val;
-  }
-  void SetValue(unsigned int iX, unsigned int iY, unsigned int iZ, double val) {
-    if (isValid(iX, iY, iZ))
-      m_grid[iX][iY][iZ] = val;
-  }
+  void SetValue(const RbtCoord &c, double val);
+
+  void SetValue(unsigned int iX, unsigned int iY, unsigned int iZ, double val);
+
   void SetValue(unsigned int iXYZ, double val) {
+    float *data = m_grid.data();
     if (isValid(iXYZ))
-      m_data[iXYZ] = val;
+      data[iXYZ] = val;
   }
 
   // Set all grid points to the given value
@@ -195,7 +196,6 @@ private:
                  bool bOverwrite = true);
 
   void CreateArrays();
-  void ClearArrays();
 
   // Helper function called by copy constructor and assignment operator
   void CopyGrid(const RbtRealGrid &);
@@ -209,9 +209,8 @@ private:
   ////////////////////////////////////////
   // Private data
   //////////////
-  float ***m_grid; // 3-D array, accessed as m_grid[i][j][k], indicies from 1
-  float *
-      m_data; // 1-D view of same 3-D array, accessed as m_data[i], index from 0
+  Eigen::Tensor<float, 3, Eigen::RowMajor>
+      m_grid;   // 3-D array, accessed as m_grid(i, j, k), indicies from 0
   double m_tol; // Tolerance for comparing grid values;
 };
 
